@@ -11,8 +11,8 @@ var sc = Math.min(width,height) * 0.5
 
 // define projection
 var projection = d3.geo.equirectangular()
-        .scale(153) // scales your map
-        .translate([width / 2, height / 2]); // centers in SVG
+        .scale(2000) // scales your map
+        .translate([width-7000 , -1000]); // centers in SVG
 
 // translate to screen coordinates
 var path = d3.geo.path()
