@@ -2,6 +2,7 @@
   "name": "currentstats",
   "version": "1.0.0",
   "dependencies": {
+    "gdal": "^0.9.9",
     "lodash": "^4.17.0"
   },
   "scripts": {

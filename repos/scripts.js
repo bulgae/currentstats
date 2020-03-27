@@ -1,22 +1,39 @@
+// define width and height
 var width = $(window).width(),
     height = $(window).height();
-
-var path = d3.geo.path();
-
-var svg = d3.select("body").append("svg")
+// create SVG
+var svg = d3.select("#map").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-var url = "https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/us.json"
-d3.json(url, function(error, topology) {
-  if (error) throw error;
-  
-  console.log("topojson", topology)
-  var geojson = topojson.feature(topology, topology.objects.counties);
-  console.log("geojson", geojson)
+// set the scale of map
+var sc = Math.min(width,height) * 0.5
 
-  svg.selectAll("path")
-      .data(geojson.features)
+// define projection
+var projection = d3.geo.equirectangular()
+        .scale(153) // scales your map
+        .translate([width / 2, height / 2]); // centers in SVG
+
+// translate to screen coordinates
+var path = d3.geo.path()
+    .projection(projection);
+
+// path generater
+svg.append("path")
+.datum(topojson.object(worldtopo, worldtopo.objects.land))
+.attr("class", "land")
+.attr("d", path);
+svg.append("path")
+.datum(topojson.mesh(worldtopo, worldtopo.objects.countries, function(a, b) { return a.id !== b.id; }))
+.attr("class", "boundary")
+.attr("d", path);
+
+// add graticule
+var graticule = d3.geo.graticule();
+
+  svg.append("g")
+    .selectAll("path")
+    .data(graticule.lines)
     .enter().append("path")
-      .attr("d", path);
-});
+    .attr("d", path)
+    .attr("class", "graticule");
