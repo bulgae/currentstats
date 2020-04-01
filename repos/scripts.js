@@ -1,22 +1,52 @@
 // define width and height
-var width = 900,
+ var width = 1000,
     height = 500;
 
 
-// create SVG
-var svg = d3.select("#map").append("svg")
-    .attr("width", width)
-    .attr("height", height);
 
+    // create SVG
+ var svg = d3.select("body").append("svg")
+   // .attr("width", width)
+   // .attr("height", height);
+
+
+d3.json("data/nz.json", function (error, nz) {
+    if (error) return console.error(error);
+ 
+
+    var projection = d3.geo.mercator();
+    //.scale(500)
+    //.translate([width / 2, height / 2]);
+
+    var path = d3.geo.path()
+    .projection(projection);
+    console.log('svg: '+svg);
+    console.log('path: '+path);
+
+    var subunits = topojson.feature(nz, nz.objects.subunits);
+
+    console.log("subunits")
+    console.log(subunits)
+    svg.append("path")
+        .datum(subunits)
+        .attr("d", path);
+
+    console.log(path);
+    console.log(svg);
+});
+
+
+
+/*
 // set the scale of map
-var sc = Math.min(width, height) 
-console.log(width, height,sc);
-console.log([sc,0])
+var sc = Math.min(width, height)
+console.log(width, height, sc);
+console.log([sc, 0])
 // define projection
 var projection = d3.geo.equirectangular()
-.scale(sc*2)
-    .translate([width-500,height-900])
-    .rotate([-180,0])
+    .scale(sc * 2)
+    .translate([width - 500, height - 900])
+    .rotate([-180, 0])
     .precision(100);
 
 // translate to screen coordinates
@@ -66,4 +96,4 @@ svg.selectAll("circle")
     .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
     .attr("cy", function (d) { return projection(d)[1]; })
     .attr("r", "8px")
-    .attr("fill", "red")
+    .attr("fill", "red")*/
