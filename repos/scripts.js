@@ -1,5 +1,5 @@
 // define width and height
- var width = 1000,
+ var width = 960,
     height = 500;
 
 
@@ -13,10 +13,10 @@
 d3.json("data/nz.json", function (error, nz) {
     if (error) return console.error(error);
  
-
+    // project nz map into large scale
     var projection = d3.geo.mercator()
-    //.scale(500)
-    //.translate([width / 2, height / 2]);
+    .scale(1500)
+    .translate([-width*4.5, -height*1.9]);
 
     var path = d3.geo.path()
     .projection(projection);
