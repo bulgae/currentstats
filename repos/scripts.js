@@ -5,16 +5,16 @@
 
 
     // create SVG
- var svg = d3.select("body").append("svg")
-   // .attr("width", width)
-   // .attr("height", height);
+ var svg = d3.select("#map").append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
 
 d3.json("data/nz.json", function (error, nz) {
     if (error) return console.error(error);
  
 
-    var projection = d3.geo.mercator();
+    var projection = d3.geo.mercator()
     //.scale(500)
     //.translate([width / 2, height / 2]);
 
