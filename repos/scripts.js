@@ -1,38 +1,74 @@
 // define width and height
- var width = 960,
-    height = 500;
+var width = 1000,
+    height = 800;
 
 
 
-    // create SVG
- var svg = d3.select("#map").append("svg")
+// create SVG
+var svg = d3.select("#map").append("svg")
     .attr("width", width)
     .attr("height", height);
 
 
 d3.json("data/nz.json", function (error, nz) {
     if (error) return console.error(error);
- 
+
     // project nz map into large scale
     var projection = d3.geo.mercator()
-    .scale(1500)
-    .translate([-width*4.5, -height*1.9]);
+        .scale(2600)
+        .translate([-width * 7.5, -height * 2]);
 
     var path = d3.geo.path()
-    .projection(projection);
-    console.log('svg: '+svg);
-    console.log('path: '+path);
+        .projection(projection);
 
     var subunits = topojson.feature(nz, nz.objects.subunits);
+    //svg.append("path")
+    //    .datum(subunits)
+    //   .attr("d", path);
 
-    console.log("subunits")
-    console.log(subunits)
-    svg.append("path")
-        .datum(subunits)
+    console.log('objects');
+    console.log(nz.objects);
+
+    svg.selectAll(".subunit")
+        .data(subunits.features)
+        .enter().append("path")
+        .attr("class", function (d) {
+            //console.log("subunit " +d)
+            return "subunit " + d.properties.SU_A3;
+        })
         .attr("d", path);
 
-    console.log(path);
-    console.log(svg);
+    var places = topojson.feature(nz, nz.objects.places);
+
+    svg.append("path")
+        .datum(places)
+        .attr("d", path)
+        .attr("class", "place");
+
+    //console.log(places)
+
+    svg.selectAll(".place-label")
+        .data(places.features)
+        .enter().append("text").attr('font-size', '10')
+        .attr("class", "place-label")
+        .attr("transform", function (d) { return "translate(" + projection(d.geometry.coordinates) + ")"; })
+        .attr("dy", ".20em")
+        .text(function (d) { //console.log(d.properties)
+            return d.properties.NAME;
+        });
+
+    svg.selectAll(".place-label")
+        .attr("x", function (d) { return d.geometry.coordinates[0] > -1 ? 6 : -6; })
+        .style("text-anchor", function (d) { return d.geometry.coordinates[0] > -1 ? "start" : "end"; });
+
+    svg.selectAll(".subunit-label")
+        .data(subunits.features)
+        .enter().append("text")
+        .attr("class", function (d) { return "subunit-label " + d.id; })
+        .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
+        .attr("dy", ".35em")
+        .text(function (d) { return d.properties.NAME_LONG; });
+
 });
 
 

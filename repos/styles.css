@@ -1,0 +1,14 @@
+.subunit.NZA { fill: #ddc; }
+.subunit.NZC { fill: #cdd; }
+.subunit.NZK { fill: #cdc; }
+.subunit.TKL { fill: #dcd; }
+.subunit.NZS { fill: #dcd;  }
+.subunit.NZN { fill: #cdd; }
+
+.subunit-label {
+    fill: #777;
+    fill-opacity: .5;
+    font-size: 20px;
+    font-weight: 300;
+    text-anchor: middle;
+  }
