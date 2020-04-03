@@ -22,12 +22,8 @@ d3.json("data/nz.json", function (error, nz) {
         .projection(projection);
 
     var subunits = topojson.feature(nz, nz.objects.subunits);
-    //svg.append("path")
-    //    .datum(subunits)
-    //   .attr("d", path);
-
-    console.log('objects');
-    console.log(nz.objects);
+   
+    svg.append("path").datum(subunits).attr("d", path);
 
     svg.selectAll(".subunit")
         .data(subunits.features)
@@ -39,17 +35,17 @@ d3.json("data/nz.json", function (error, nz) {
         .attr("d", path);
 
     var places = topojson.feature(nz, nz.objects.places);
-
+    
     svg.append("path")
         .datum(places)
         .attr("d", path)
         .attr("class", "place");
 
-    //console.log(places)
-
     svg.selectAll(".place-label")
-        .data(places.features)
-        .enter().append("text").attr('font-size', '10')
+        .data(places.features.filter(function(e){
+            return e.properties.SCALERANK > 6;
+    }))
+        .enter().append("text").attr('font-size', '8')
         .attr("class", "place-label")
         .attr("transform", function (d) { return "translate(" + projection(d.geometry.coordinates) + ")"; })
         .attr("dy", ".20em")
